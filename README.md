@@ -28,7 +28,7 @@
 
 ## 🚀 在线预览
 
-🔗 **[在线访问](https://your-username.github.io/digital-education-portal/)**
+🔗 **[在线访问](https://hrvs0769.github.io/digital-education-portal/)**
 
 ## 📖 使用指南
 
@@ -36,7 +36,7 @@
 
 ```bash
 # 克隆项目
-git clone https://github.com/your-username/digital-education-portal.git
+git clone https://github.com/hrvs0769/digital-education-portal.git
 cd digital-education-portal
 
 # 启动本地服务器
