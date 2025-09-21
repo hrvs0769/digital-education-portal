@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学习笔记 - 数字教育门户</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Glass morphism effects */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        
+        /* Premium card styles */
+        .premium-card {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            transition: all 0.4s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+        .premium-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 32px 64px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        /* Note card styles */
+        .note-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+        .note-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        .note-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 2px 0 0 2px;
+        }
+        
+        /* Gradient backgrounds */
+        .hero-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        /* Text gradients */
+        .text-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Button styles */
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(102, 126, 234, 0.4);
+        }
+        
+        /* Editor styles */
+        .note-editor {
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        .note-editor:focus-within {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        /* Filter tabs */
+        .filter-tab {
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            font-weight: 600;
+            position: relative;
+        }
+        .filter-tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: scale(1.05);
+        }
+        
+        /* Search enhancement */
+        .search-highlight {
+            background: linear-gradient(120deg, #fef3c7 0%, #fde68a 100%);
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        
+        /* Animation keyframes */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        /* Course color indicators */
+        .course-ai { border-left: 4px solid #667eea; }
+        .course-web { border-left: 4px solid #06d6a0; }
+        .course-design { border-left: 4px solid #f72585; }
+        .course-data { border-left: 4px solid #ff8500; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 min-h-screen">
+    <!-- Header Navigation -->
+    <header class="bg-white/80 backdrop-blur-md shadow-2xl sticky top-0 z-50 border-b border-white/20">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center">
+                        <i class="fas fa-graduation-cap text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-black text-gradient">数字教育门户</h1>
+                    </div>
+                </div>
+                <nav class="hidden md:flex space-x-10">
+                    <a href="index.html" class="text-gray-700 hover:text-blue-600 font-medium transition-all duration-300 hover:scale-105">首页</a>
+                    <a href="courses.html" class="text-gray-700 hover:text-blue-600 font-medium transition-all duration-300 hover:scale-105">系列课程</a>
+                    <a href="course-collection.html" class="text-gray-700 hover:text-blue-600 font-medium transition-all duration-300 hover:scale-105">课程合集</a>
+                    <a href="knowledge.html" class="text-gray-700 hover:text-blue-600 font-medium transition-all duration-300 hover:scale-105">知识成果</a>
+                    <a href="notes.html" class="text-blue-600 font-semibold border-b-2 border-blue-600 pb-2 transition-all duration-300">学习笔记</a>
+                    <a href="favorites.html" class="text-gray-700 hover:text-blue-600 font-medium transition-all duration-300 hover:scale-105">我的收藏</a>
+                    <a href="dashboard.html" class="text-gray-700 hover:text-blue-600 font-medium transition-all duration-300 hover:scale-105">学习中心</a>
+                </nav>
+                <div class="flex items-center space-x-4">
+                    <!-- 用户信息显示区域 -->
+                    <div id="user-info" class="hidden md:flex items-center space-x-3 bg-gray-100 text-gray-700 px-4 py-3 rounded-full font-semibold">
+                        <div class="user-display-avatar w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                            张
+                        </div>
+                        <span class="user-display-name">张同学</span>
+                    </div>
+                    <!-- 登录/登出按钮区域 -->
+                    <button id="auth-button" class="btn-primary text-white px-6 py-3 rounded-full font-semibold hover:scale-105 transition-all duration-300" style="display: none;">
+                        <i class="fas fa-sign-out-alt mr-2"></i>登出
+                    </button>
+                    <!-- 移动端菜单按钮 -->
+                    <button id="mobile-menu-button" class="md:hidden text-2xl text-gray-600 hover:text-blue-600 transition-colors">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="hero-gradient text-white py-16 relative overflow-hidden">
+        <div class="absolute top-6 left-6 w-24 h-24 bg-white/10 rounded-full blur-xl"></div>
+        <div class="absolute bottom-6 right-6 w-32 h-32 bg-white/10 rounded-full blur-xl"></div>
+        
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="text-center fade-in-up">
+                <div class="inline-flex items-center bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-6 py-3 mb-6">
+                    <span class="w-2 h-2 bg-yellow-400 rounded-full mr-3 animate-pulse"></span>
+                    <span class="text-sm font-bold">智能笔记管理</span>
+                </div>
+                <h1 class="text-5xl font-black mb-4 leading-tight">
+                    学习
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-400">
+                        笔记
+                    </span>
+                </h1>
+                <p class="text-xl opacity-90 mb-8 max-w-3xl mx-auto leading-relaxed">
+                    管理您的学习笔记，跨课程整理知识点，让学习更加高效有序。
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
+                    <div class="glass-card p-6 rounded-2xl text-center">
+                        <div class="w-12 h-12 bg-blue-400/20 rounded-xl flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-sticky-note text-blue-300 text-xl"></i>
+                        </div>
+                        <div class="text-2xl font-black mb-2" id="total-notes">25</div>
+                        <div class="text-sm opacity-90">总笔记数</div>
+                    </div>
+                    <div class="glass-card p-6 rounded-2xl text-center">
+                        <div class="w-12 h-12 bg-green-400/20 rounded-xl flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-book text-green-300 text-xl"></i>
+                        </div>
+                        <div class="text-2xl font-black mb-2" id="total-courses">6</div>
+                        <div class="text-sm opacity-90">关联课程</div>
+                    </div>
+                    <div class="glass-card p-6 rounded-2xl text-center">
+                        <div class="w-12 h-12 bg-purple-400/20 rounded-xl flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-clock text-purple-300 text-xl"></i>
+                        </div>
+                        <div class="text-2xl font-black mb-2">今日</div>
+                        <div class="text-sm opacity-90">最后更新</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="py-12">
+        <div class="container mx-auto px-4">
+            <!-- Controls Section -->
+            <div class="premium-card p-8 mb-8">
+                <div class="flex flex-col lg:flex-row gap-6 items-start lg:items-center justify-between">
+                    <!-- Search Bar -->
+                    <div class="flex-1 relative group">
+                        <div class="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl blur opacity-25 group-hover:opacity-75 transition duration-300"></div>
+                        <div class="relative">
+                            <input type="text" id="note-search" placeholder="搜索笔记内容、课程名称、关键词..." 
+                                   class="w-full pl-12 pr-6 py-4 border-2 border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 text-lg bg-white/90 backdrop-blur-sm">
+                            <div class="absolute left-4 top-1/2 transform -translate-y-1/2">
+                                <i class="fas fa-search text-gray-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Filter Tabs -->
+                    <div class="flex gap-3">
+                        <button class="filter-tab px-6 py-3 text-gray-700 active" data-filter="all">
+                            <i class="fas fa-th-large mr-2"></i>全部
+                        </button>
+                        <button class="filter-tab px-6 py-3 text-gray-700" data-filter="recent">
+                            <i class="fas fa-clock mr-2"></i>最近
+                        </button>
+                        <button class="filter-tab px-6 py-3 text-gray-700" data-filter="favorite">
+                            <i class="fas fa-star mr-2"></i>收藏
+                        </button>
+                    </div>
+                    
+                    <!-- Add Note Button -->
+                    <button id="add-note-btn" class="btn-primary text-white px-6 py-3 rounded-xl font-bold hover:scale-105 transition-all duration-300">
+                        <i class="fas fa-plus mr-2"></i>新建笔记
+                    </button>
+                </div>
+            </div>
+
+            <!-- Notes Grid -->
+            <div id="notes-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Note cards will be dynamically inserted here -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="empty-state" class="text-center py-16 hidden">
+                <div class="w-32 h-32 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-sticky-note text-gray-400 text-4xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">还没有学习笔记</h3>
+                <p class="text-gray-600 mb-8">开始记录您的学习心得和重要知识点吧！</p>
+                <button class="btn-primary text-white px-8 py-3 rounded-xl font-bold hover:scale-105 transition-all duration-300">
+                    <i class="fas fa-plus mr-2"></i>创建第一条笔记
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Note Editor Modal -->
+    <div id="note-modal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden">
+                <div class="flex items-center justify-between p-8 border-b">
+                    <h2 id="modal-title" class="text-2xl font-bold text-gray-900">新建笔记</h2>
+                    <button id="close-modal" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times text-2xl"></i>
+                    </button>
+                </div>
+                <div class="p-8 overflow-y-auto" style="max-height: calc(90vh - 140px);">
+                    <form id="note-form" class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">笔记标题</label>
+                            <input type="text" id="note-title" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="请输入笔记标题">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">关联课程</label>
+                            <select id="note-course" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                <option value="">选择课程</option>
+                                <option value="digital-resources">数字资源开发基础</option>
+                                <option value="interactive-design">交互式学习设计</option>
+                                <option value="ai-education">AI增强教育</option>
+                                <option value="vr-learning">VR/AR学习环境</option>
+                                <option value="adaptive-systems">自适应学习系统</option>
+                                <option value="future-education">数字教育未来</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">笔记内容</label>
+                            <div class="note-editor">
+                                <textarea id="note-content" rows="12" class="w-full px-4 py-3 border-none outline-none resize-none" placeholder="在这里记录您的学习心得和重要知识点..."></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center space-x-4">
+                            <label class="flex items-center">
+                                <input type="checkbox" id="note-favorite" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                <span class="ml-2 text-sm text-gray-700">标记为重要笔记</span>
+                            </label>
+                        </div>
+                        
+                        <div class="flex gap-4 pt-4">
+                            <button type="submit" class="flex-1 btn-primary text-white py-3 rounded-xl font-bold hover:scale-105 transition-all duration-300">
+                                <i class="fas fa-save mr-2"></i>保存笔记
+                            </button>
+                            <button type="button" id="cancel-note" class="px-8 py-3 border border-gray-300 text-gray-700 rounded-xl font-bold hover:bg-gray-50 transition-colors">
+                                取消
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/common.js"></script>
+    <script src="js/mobile-nav.js"></script>
+    <script src="js/global-search.js"></script>
+    <script>
+        // 笔记管理系统
+        class NotesManager {
+            constructor() {
+                this.notes = [];
+                this.currentFilter = 'all';
+                this.currentEditingId = null;
+                this.init();
+            }
+
+            init() {
+                this.loadNotes();
+                this.bindEvents();
+                this.renderNotes();
+                this.updateStats();
+            }
+
+            // 加载笔记数据
+            loadNotes() {
+                const savedNotes = localStorage.getItem('learningNotes');
+                if (savedNotes) {
+                    this.notes = JSON.parse(savedNotes);
+                } else {
+                    // 示例数据
+                    this.notes = [
+                        {
+                            id: '1',
+                            title: '数字资源的基本分类',
+                            content: '数字资源主要分为：\n1. 文本资源：PDF、Word文档、电子书\n2. 多媒体资源：视频、音频、动画\n3. 交互资源：模拟器、游戏化学习工具\n4. 数据资源：数据集、API接口',
+                            course: 'digital-resources',
+                            courseName: '数字资源开发基础',
+                            favorite: true,
+                            createdAt: new Date('2025-01-15T10:30:00').toISOString(),
+                            updatedAt: new Date('2025-01-15T10:30:00').toISOString(),
+                            courseColor: 'course-ai'
+                        },
+                        {
+                            id: '2',
+                            title: '交互设计的核心原则',
+                            content: '用户体验设计的核心原则：\n- 简洁性：界面设计要简洁明了\n- 一致性：保持设计风格统一\n- 反馈性：及时给用户操作反馈\n- 可访问性：确保所有用户都能使用',
+                            course: 'interactive-design',
+                            courseName: '交互式学习设计',
+                            favorite: false,
+                            createdAt: new Date('2025-01-14T14:20:00').toISOString(),
+                            updatedAt: new Date('2025-01-14T14:20:00').toISOString(),
+                            courseColor: 'course-design'
+                        },
+                        {
+                            id: '3',
+                            title: 'AI在教育中的应用场景',
+                            content: '人工智能在教育领域的主要应用：\n1. 个性化学习推荐\n2. 智能评测和反馈\n3. 学习行为分析\n4. 虚拟助教和答疑\n5. 内容自动生成',
+                            course: 'ai-education',
+                            courseName: 'AI增强教育',
+                            favorite: true,
+                            createdAt: new Date('2025-01-13T09:15:00').toISOString(),
+                            updatedAt: new Date('2025-01-13T09:15:00').toISOString(),
+                            courseColor: 'course-ai'
+                        }
+                    ];
+                    this.saveNotes();
+                }
+            }
+
+            // 保存笔记到本地存储
+            saveNotes() {
+                localStorage.setItem('learningNotes', JSON.stringify(this.notes));
+            }
+
+            // 绑定事件
+            bindEvents() {
+                // 搜索功能
+                document.getElementById('note-search').addEventListener('input', (e) => {
+                    this.searchNotes(e.target.value);
+                });
+
+                // 筛选功能
+                document.querySelectorAll('.filter-tab').forEach(tab => {
+                    tab.addEventListener('click', (e) => {
+                        this.setFilter(e.target.closest('.filter-tab').dataset.filter);
+                    });
+                });
+
+                // 新建笔记
+                document.getElementById('add-note-btn').addEventListener('click', () => {
+                    this.openNoteModal();
+                });
+
+                // 模态框控制
+                document.getElementById('close-modal').addEventListener('click', () => {
+                    this.closeNoteModal();
+                });
+
+                document.getElementById('cancel-note').addEventListener('click', () => {
+                    this.closeNoteModal();
+                });
+
+                // 表单提交
+                document.getElementById('note-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.saveNote();
+                });
+            }
+
+            // 渲染笔记列表
+            renderNotes() {
+                const container = document.getElementById('notes-container');
+                const emptyState = document.getElementById('empty-state');
+                
+                let filteredNotes = this.notes;
+
+                // 应用筛选
+                if (this.currentFilter === 'recent') {
+                    filteredNotes = this.notes.slice().sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)).slice(0, 10);
+                } else if (this.currentFilter === 'favorite') {
+                    filteredNotes = this.notes.filter(note => note.favorite);
+                }
+
+                if (filteredNotes.length === 0) {
+                    container.innerHTML = '';
+                    emptyState.classList.remove('hidden');
+                    return;
+                }
+
+                emptyState.classList.add('hidden');
+                container.innerHTML = filteredNotes.map(note => this.createNoteCard(note)).join('');
+
+                // 绑定卡片事件
+                this.bindNoteCardEvents();
+            }
+
+            // 创建笔记卡片
+            createNoteCard(note) {
+                const createdDate = new Date(note.createdAt).toLocaleDateString('zh-CN');
+                const updatedDate = new Date(note.updatedAt).toLocaleDateString('zh-CN');
+                const preview = note.content.substring(0, 150) + (note.content.length > 150 ? '...' : '');
+
+                return `
+                    <div class="note-card p-6 ${note.courseColor}" data-note-id="${note.id}">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="flex-1">
+                                <h3 class="text-lg font-bold text-gray-900 mb-2">${note.title}</h3>
+                                <div class="flex items-center text-sm text-gray-500 mb-2">
+                                    <i class="fas fa-book mr-2"></i>
+                                    <span>${note.courseName || '未分类'}</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                ${note.favorite ? '<i class="fas fa-star text-yellow-500"></i>' : ''}
+                                <div class="relative">
+                                    <button class="note-menu-btn text-gray-400 hover:text-gray-600 p-1">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <div class="note-menu absolute right-0 top-8 bg-white border rounded-lg shadow-lg py-2 min-w-32 hidden z-10">
+                                        <button class="edit-note w-full px-4 py-2 text-left hover:bg-gray-50 text-sm">
+                                            <i class="fas fa-edit mr-2"></i>编辑
+                                        </button>
+                                        <button class="toggle-favorite w-full px-4 py-2 text-left hover:bg-gray-50 text-sm">
+                                            <i class="fas fa-star mr-2"></i>${note.favorite ? '取消收藏' : '加入收藏'}
+                                        </button>
+                                        <button class="delete-note w-full px-4 py-2 text-left hover:bg-gray-50 text-sm text-red-600">
+                                            <i class="fas fa-trash mr-2"></i>删除
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-gray-600 text-sm mb-4 leading-relaxed">
+                            ${preview.replace(/\n/g, '<br>')}
+                        </div>
+                        
+                        <div class="flex items-center justify-between text-xs text-gray-400">
+                            <span>创建于 ${createdDate}</span>
+                            <span>更新于 ${updatedDate}</span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // 绑定笔记卡片事件
+            bindNoteCardEvents() {
+                // 菜单按钮
+                document.querySelectorAll('.note-menu-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const menu = btn.nextElementSibling;
+                        // 关闭其他菜单
+                        document.querySelectorAll('.note-menu').forEach(m => {
+                            if (m !== menu) m.classList.add('hidden');
+                        });
+                        menu.classList.toggle('hidden');
+                    });
+                });
+
+                // 编辑笔记
+                document.querySelectorAll('.edit-note').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const noteId = e.target.closest('.note-card').dataset.noteId;
+                        this.editNote(noteId);
+                    });
+                });
+
+                // 切换收藏
+                document.querySelectorAll('.toggle-favorite').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const noteId = e.target.closest('.note-card').dataset.noteId;
+                        this.toggleFavorite(noteId);
+                    });
+                });
+
+                // 删除笔记
+                document.querySelectorAll('.delete-note').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const noteId = e.target.closest('.note-card').dataset.noteId;
+                        this.deleteNote(noteId);
+                    });
+                });
+
+                // 点击卡片查看详情
+                document.querySelectorAll('.note-card').forEach(card => {
+                    card.addEventListener('click', (e) => {
+                        // 避免点击菜单时触发
+                        if (!e.target.closest('.note-menu-btn') && !e.target.closest('.note-menu')) {
+                            const noteId = card.dataset.noteId;
+                            this.viewNote(noteId);
+                        }
+                    });
+                });
+
+                // 点击外部关闭菜单
+                document.addEventListener('click', () => {
+                    document.querySelectorAll('.note-menu').forEach(menu => {
+                        menu.classList.add('hidden');
+                    });
+                });
+            }
+
+            // 搜索笔记
+            searchNotes(query) {
+                const container = document.getElementById('notes-container');
+                if (!query.trim()) {
+                    this.renderNotes();
+                    return;
+                }
+
+                const filteredNotes = this.notes.filter(note => {
+                    return note.title.toLowerCase().includes(query.toLowerCase()) ||
+                           note.content.toLowerCase().includes(query.toLowerCase()) ||
+                           (note.courseName && note.courseName.toLowerCase().includes(query.toLowerCase()));
+                });
+
+                if (filteredNotes.length === 0) {
+                    container.innerHTML = '<div class="col-span-full text-center py-16"><div class="text-gray-500">没有找到相关笔记</div></div>';
+                } else {
+                    container.innerHTML = filteredNotes.map(note => this.createNoteCard(note)).join('');
+                    this.bindNoteCardEvents();
+                }
+            }
+
+            // 设置筛选
+            setFilter(filter) {
+                this.currentFilter = filter;
+                
+                // 更新筛选按钮状态
+                document.querySelectorAll('.filter-tab').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                document.querySelector(`[data-filter="${filter}"]`).classList.add('active');
+                
+                this.renderNotes();
+            }
+
+            // 打开笔记模态框
+            openNoteModal(note = null) {
+                const modal = document.getElementById('note-modal');
+                const title = document.getElementById('modal-title');
+                
+                if (note) {
+                    title.textContent = '编辑笔记';
+                    this.currentEditingId = note.id;
+                    document.getElementById('note-title').value = note.title;
+                    document.getElementById('note-course').value = note.course;
+                    document.getElementById('note-content').value = note.content;
+                    document.getElementById('note-favorite').checked = note.favorite;
+                } else {
+                    title.textContent = '新建笔记';
+                    this.currentEditingId = null;
+                    document.getElementById('note-form').reset();
+                }
+                
+                modal.classList.remove('hidden');
+            }
+
+            // 关闭笔记模态框
+            closeNoteModal() {
+                const modal = document.getElementById('note-modal');
+                modal.classList.add('hidden');
+                this.currentEditingId = null;
+                document.getElementById('note-form').reset();
+            }
+
+            // 保存笔记
+            saveNote() {
+                const title = document.getElementById('note-title').value.trim();
+                const course = document.getElementById('note-course').value;
+                const content = document.getElementById('note-content').value.trim();
+                const favorite = document.getElementById('note-favorite').checked;
+
+                if (!title || !content) {
+                    alert('请填写笔记标题和内容');
+                    return;
+                }
+
+                const courseNames = {
+                    'digital-resources': '数字资源开发基础',
+                    'interactive-design': '交互式学习设计',
+                    'ai-education': 'AI增强教育',
+                    'vr-learning': 'VR/AR学习环境',
+                    'adaptive-systems': '自适应学习系统',
+                    'future-education': '数字教育未来'
+                };
+
+                const courseColors = {
+                    'digital-resources': 'course-ai',
+                    'interactive-design': 'course-design',
+                    'ai-education': 'course-ai',
+                    'vr-learning': 'course-web',
+                    'adaptive-systems': 'course-data',
+                    'future-education': 'course-web'
+                };
+
+                const noteData = {
+                    title,
+                    content,
+                    course,
+                    courseName: courseNames[course] || '',
+                    courseColor: courseColors[course] || 'course-ai',
+                    favorite,
+                    updatedAt: new Date().toISOString()
+                };
+
+                if (this.currentEditingId) {
+                    // 编辑现有笔记
+                    const noteIndex = this.notes.findIndex(note => note.id === this.currentEditingId);
+                    if (noteIndex !== -1) {
+                        this.notes[noteIndex] = { ...this.notes[noteIndex], ...noteData };
+                    }
+                } else {
+                    // 创建新笔记
+                    const newNote = {
+                        id: Date.now().toString(),
+                        ...noteData,
+                        createdAt: new Date().toISOString()
+                    };
+                    this.notes.unshift(newNote);
+                }
+
+                this.saveNotes();
+                this.renderNotes();
+                this.updateStats();
+                this.closeNoteModal();
+                
+                // 显示成功消息
+                this.showNotification(this.currentEditingId ? '笔记已更新' : '笔记已保存', 'success');
+            }
+
+            // 编辑笔记
+            editNote(noteId) {
+                const note = this.notes.find(note => note.id === noteId);
+                if (note) {
+                    this.openNoteModal(note);
+                }
+            }
+
+            // 查看笔记
+            viewNote(noteId) {
+                const note = this.notes.find(note => note.id === noteId);
+                if (note) {
+                    this.openNoteModal(note);
+                }
+            }
+
+            // 切换收藏状态
+            toggleFavorite(noteId) {
+                const note = this.notes.find(note => note.id === noteId);
+                if (note) {
+                    note.favorite = !note.favorite;
+                    note.updatedAt = new Date().toISOString();
+                    this.saveNotes();
+                    this.renderNotes();
+                    this.showNotification(note.favorite ? '已加入收藏' : '已取消收藏', 'info');
+                }
+            }
+
+            // 删除笔记
+            deleteNote(noteId) {
+                if (confirm('确定要删除这条笔记吗？此操作无法撤销。')) {
+                    this.notes = this.notes.filter(note => note.id !== noteId);
+                    this.saveNotes();
+                    this.renderNotes();
+                    this.updateStats();
+                    this.showNotification('笔记已删除', 'info');
+                }
+            }
+
+            // 更新统计信息
+            updateStats() {
+                document.getElementById('total-notes').textContent = this.notes.length;
+                const uniqueCourses = new Set(this.notes.map(note => note.course).filter(Boolean));
+                document.getElementById('total-courses').textContent = uniqueCourses.size;
+            }
+
+            // 显示通知
+            showNotification(message, type = 'info') {
+                // 创建通知元素
+                const notification = document.createElement('div');
+                notification.className = `fixed top-4 right-4 p-4 rounded-xl shadow-lg z-50 transition-all duration-300 transform translate-x-full max-w-sm`;
+                
+                // 根据类型设置样式
+                switch(type) {
+                    case 'success':
+                        notification.classList.add('bg-green-500', 'text-white');
+                        break;
+                    case 'error':
+                        notification.classList.add('bg-red-500', 'text-white');
+                        break;
+                    case 'warning':
+                        notification.classList.add('bg-yellow-500', 'text-white');
+                        break;
+                    default:
+                        notification.classList.add('bg-blue-500', 'text-white');
+                }
+                
+                notification.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'} mr-3"></i>
+                            <span>${message}</span>
+                        </div>
+                        <button onclick="this.parentElement.parentElement.remove()" class="ml-4 text-white hover:text-gray-200">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                `;
+                
+                document.body.appendChild(notification);
+                
+                // 显示动画
+                setTimeout(() => {
+                    notification.classList.remove('translate-x-full');
+                }, 100);
+                
+                // 自动消失
+                setTimeout(() => {
+                    notification.classList.add('translate-x-full');
+                    setTimeout(() => {
+                        notification.remove();
+                    }, 300);
+                }, 5000);
+            }
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化用户状态管理器
+            if (typeof UserStateManager !== 'undefined') {
+                window.userStateManager = new UserStateManager();
+            }
+            
+            // 初始化笔记管理器
+            window.notesManager = new NotesManager();
+        });
+    </script>
+</body>
+</html>

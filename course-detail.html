@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>课程学习 - 数字资源开发基础 - 数字教育门户</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Video.js for video player -->
+    <link href="https://vjs.zencdn.net/8.8.0/video-js.css" rel="stylesheet">
+    <script src="https://vjs.zencdn.net/8.8.0/video.min.js"></script>
+    
+    <style>
+        /* Custom styles for learning interface */
+        .premium-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .course-section.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .notes-area {
+            background: #f8fafc;
+            border: 2px dashed #cbd5e1;
+            transition: all 0.3s ease;
+        }
+        .notes-area:focus-within {
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, #22c55e, #10b981);
+        }
+        
+        .tab-button.active {
+            color: #667eea;
+        }
+        .tab-button.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+        
+        .quiz-option {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid #e5e7eb;
+        }
+        .quiz-option:hover {
+            border-color: #667eea;
+        }
+        .quiz-option.correct {
+            border-color: #22c55e;
+            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header Navigation -->
+    <header class="bg-white/95 backdrop-blur-md shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-4">
+                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-graduation-cap text-white"></i>
+                    </div>
+                    <h1 class="text-xl font-black text-gradient">数字教育门户</h1>
+                </div>
+                <nav class="hidden md:flex space-x-8">
+                    <a href="index.html" class="text-gray-700 hover:text-blue-600">首页</a>
+                    <a href="courses.html" class="text-blue-600 font-semibold border-b-2 border-blue-600">系列课程</a>
+                    <a href="course-collection.html" class="text-gray-700 hover:text-blue-600">课程合集</a>
+                    <a href="knowledge.html" class="text-gray-700 hover:text-blue-600">知识成果</a>
+                    <a href="notes.html" class="text-gray-700 hover:text-blue-600">学习笔记</a>
+                    <a href="favorites.html" class="text-gray-700 hover:text-blue-600">我的收藏</a>
+                    <a href="dashboard.html" class="text-gray-700 hover:text-blue-600">学习中心</a>
+                </nav>
+                <div class="flex items-center space-x-4">
+                    <!-- 用户信息显示区域 -->
+                    <div id="user-info" class="hidden md:flex items-center space-x-3 bg-gray-100 px-4 py-2 rounded-full">
+                        <div class="user-display-avatar w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-bold">张</div>
+                        <span class="user-display-name">张同学</span>
+                    </div>
+                    <!-- 登录/登出按钮区域 -->
+                    <button id="auth-button" class="btn-primary text-white px-4 py-2 rounded-full" style="display: none;">
+                        <i class="fas fa-sign-out-alt mr-2"></i>登出
+                    </button>
+                    <a href="courses.html" class="btn-primary text-white px-4 py-2 rounded-full">
+                        <i class="fas fa-arrow-left mr-2"></i>返回课程
+                    </a>
+                    <!-- 移动端菜单按钮 -->
+                    <button id="mobile-menu-button" class="md:hidden text-2xl text-gray-600 hover:text-blue-600 transition-colors">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Course Progress Bar -->
+    <div class="bg-white border-b">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex items-center justify-between text-sm">
+                <div class="flex items-center space-x-4">
+                    <span class="font-medium">数字资源开发基础</span>
+                    <span class="text-gray-500">| 第1节/共6节</span>
+                    <button id="course-favorite-btn" class="favorite-btn-detail ml-4 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-xs transition-colors" 
+                            data-course-id="digital-resource-development" 
+                            data-course-title="数字资源开发基础" 
+                            data-course-description="学习数字资源开发的基本技能，掌握多媒体内容创作与管理。" 
+                            data-course-duration="20小时" 
+                            data-course-level="初级" 
+                            data-course-category="数字教育" 
+                            data-course-rating="4.8" 
+                            data-course-students="1200" 
+                            data-course-image="gradient-blue-purple">
+                        <i class="fas fa-bookmark mr-1"></i>收藏课程
+                    </button>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <span>75% 完成</span>
+                    <div class="w-32 h-2 bg-gray-200 rounded-full">
+                        <div class="progress-bar h-full w-3/4 rounded-full"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Learning Interface -->
+    <div class="container mx-auto px-4 py-6">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <!-- Video and Content Area -->
+            <div class="lg:col-span-3 space-y-6">
+                <!-- Video Player -->
+                <div class="premium-card p-6">
+                    <div class="bg-black rounded-lg mb-4">
+                        <video 
+                            id="course-video" 
+                            class="video-js vjs-default-skin w-full" 
+                            controls 
+                            preload="auto" 
+                            width="800" 
+                            height="450">
+                            <source src="https://vjs.zencdn.net/v/oceans.mp4" type="video/mp4" />
+                        </video>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-2xl font-bold">第1节：数字资源开发概述</h2>
+                        <div class="flex space-x-2">
+                            <button class="bg-gray-100 px-3 py-2 rounded-lg" disabled>
+                                <i class="fas fa-step-backward mr-1"></i>上一节
+                            </button>
+                            <button class="btn-primary text-white px-3 py-2 rounded-lg">
+                                下一节<i class="fas fa-step-forward ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Course Content Tabs -->
+                <div class="premium-card">
+                    <div class="border-b">
+                        <nav class="flex space-x-8 px-6">
+                            <button class="tab-button active py-4 relative" data-tab="overview">
+                                <i class="fas fa-info-circle mr-2"></i>课程概述
+                            </button>
+                            <button class="tab-button py-4 relative text-gray-500" data-tab="notes">
+                                <i class="fas fa-sticky-note mr-2"></i>学习笔记
+                            </button>
+                            <button class="tab-button py-4 relative text-gray-500" data-tab="quiz">
+                                <i class="fas fa-question-circle mr-2"></i>知识检测
+                            </button>
+                            <button class="tab-button py-4 relative text-gray-500" data-tab="resources">
+                                <i class="fas fa-download mr-2"></i>课程资源
+                            </button>
+                        </nav>
+                    </div>
+                    
+                    <div class="p-6">
+                        <!-- Overview Tab -->
+                        <div id="overview-content" class="tab-content">
+                            <h3 class="text-xl font-bold mb-4">本节学习目标</h3>
+                            <ul class="space-y-2 mb-6">
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                                    理解数字资源开发的基本概念和重要性
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                                    掌握数字资源的分类和特点
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                                    学习数字资源开发的基本流程和方法
+                                </li>
+                            </ul>
+                            
+                            <div class="bg-blue-50 p-4 rounded-lg mb-4">
+                                <h4 class="font-semibold text-blue-900 mb-2">什么是数字资源？</h4>
+                                <p class="text-blue-800">
+                                    数字资源是指以数字化形式存在的各种信息内容，包括文本、图像、声音、视频、动画等多媒体形式。
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Notes Tab -->
+                        <div id="notes-content" class="tab-content hidden">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-xl font-bold">学习笔记</h3>
+                                <button id="save-notes" class="btn-primary text-white px-4 py-2 rounded-lg">
+                                    <i class="fas fa-save mr-2"></i>保存笔记
+                                </button>
+                            </div>
+                            <div class="notes-area rounded-lg p-4">
+                                <textarea 
+                                    id="course-notes" 
+                                    placeholder="在这里记录您的学习笔记和思考..."
+                                    class="w-full h-64 border-none outline-none resize-none bg-transparent"
+                                ></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Quiz Tab -->
+                        <div id="quiz-content" class="tab-content hidden">
+                            <div class="flex items-center justify-between mb-6">
+                                <h3 class="text-xl font-bold">知识检测</h3>
+                                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">题目 1/3</span>
+                            </div>
+                            
+                            <div class="bg-gray-50 p-6 rounded-lg mb-6">
+                                <h4 class="text-lg font-semibold mb-4">以下哪个不属于数字资源的主要类型？</h4>
+                                <div class="space-y-3">
+                                    <div class="quiz-option p-4 rounded-lg" data-answer="false">
+                                        <label class="flex items-center cursor-pointer">
+                                            <input type="radio" name="q1" class="mr-3">
+                                            <span>A. 文本文档</span>
+                                        </label>
+                                    </div>
+                                    <div class="quiz-option p-4 rounded-lg" data-answer="true">
+                                        <label class="flex items-center cursor-pointer">
+                                            <input type="radio" name="q1" class="mr-3">
+                                            <span>C. 纸质书籍</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <button id="check-answer" class="btn-primary text-white px-4 py-2 rounded-lg">
+                                检查答案
+                            </button>
+                        </div>
+
+                        <!-- Resources Tab -->
+                        <div id="resources-content" class="tab-content hidden">
+                            <h3 class="text-xl font-bold mb-6">课程资源下载</h3>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="bg-white border p-4 rounded-lg">
+                                    <div class="flex items-center mb-3">
+                                        <i class="fas fa-file-pdf text-red-500 text-2xl mr-3"></i>
+                                        <div>
+                                            <h4 class="font-semibold">课程幻灯片</h4>
+                                            <p class="text-sm text-gray-600">PDF 格式, 2.3MB</p>
+                                        </div>
+                                    </div>
+                                    <button class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg">
+                                        <i class="fas fa-download mr-2"></i>下载
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course Sidebar -->
+            <div class="lg:col-span-1">
+                <div class="premium-card p-6 sticky top-24">
+                    <div class="text-center mb-6">
+                        <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-list-ul text-white text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">课程大纲</h3>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <div class="course-section p-3 rounded-lg border-l-4 border-blue-500">
+                            <div class="flex items-center justify-between mb-1">
+                                <div class="font-bold text-sm">第1节</div>
+                                <i class="fas fa-play text-xs"></i>
+                            </div>
+                            <div class="font-semibold text-sm">数字资源开发概述</div>
+                            <div class="text-xs opacity-90">12分钟 · 正在学习</div>
+                        </div>
+                        
+                        <div class="p-3 rounded-lg border border-gray-200">
+                            <div class="flex items-center justify-between mb-1">
+                                <div class="font-bold text-sm text-gray-700">第2节</div>
+                                <i class="fas fa-lock text-gray-500 text-xs"></i>
+                            </div>
+                            <div class="font-semibold text-sm text-gray-700">多媒体内容设计</div>
+                            <div class="text-xs text-gray-500">15分钟 · 待解锁</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript for functionality -->
+    <script src="js/common.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/mobile-nav.js"></script>
+    <script src="js/global-search.js"></script>
+    <script>
+        // Learning progress management
+        let learningProgress = {
+            currentVideo: 1,
+            totalVideos: 6,
+            watchedDuration: 0,
+            totalDuration: 720, // 12 minutes in seconds
+            notes: [],
+            quizAnswers: {},
+            completedSections: []
+        };
+
+        // Initialize video player
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化用户状态管理器
+            if (typeof UserStateManager !== 'undefined') {
+                window.userStateManager = new UserStateManager();
+            }
+            
+            // 初始化收藏管理器
+            if (typeof FavoritesManager !== 'undefined') {
+                window.favoritesManager = new FavoritesManager();
+                initializeFavoriteButton();
+            }
+            
+            const player = videojs('course-video', {
+                fluid: true,
+                responsive: true,
+                playbackRates: [0.5, 1, 1.25, 1.5, 2],
+                controls: true
+            });
+
+            // Track video progress
+            player.on('timeupdate', function() {
+                learningProgress.watchedDuration = player.currentTime();
+                updateProgress();
+                saveProgress();
+            });
+
+            // Load saved progress
+            loadProgress();
+            initializeTabs();
+            initializeQuiz();
+            initializeNotes();
+        });
+
+        // Tab switching functionality
+        function initializeTabs() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetTab = button.getAttribute('data-tab');
+                    
+                    // Update active tab
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    
+                    // Show target content
+                    tabContents.forEach(content => {
+                        content.classList.add('hidden');
+                    });
+                    document.getElementById(targetTab + '-content').classList.remove('hidden');
+                });
+            });
+        }
+
+        // Quiz functionality
+        function initializeQuiz() {
+            const checkAnswerBtn = document.getElementById('check-answer');
+            
+            checkAnswerBtn.addEventListener('click', function() {
+                const selectedOption = document.querySelector('input[name="q1"]:checked');
+                if (!selectedOption) {
+                    showNotification('请选择一个答案', 'warning');
+                    return;
+                }
+
+                const isCorrect = selectedOption.closest('.quiz-option').getAttribute('data-answer') === 'true';
+                const options = document.querySelectorAll('.quiz-option');
+                
+                options.forEach(option => {
+                    if (option.getAttribute('data-answer') === 'true') {
+                        option.classList.add('correct');
+                    }
+                });
+
+                if (isCorrect) {
+                    showNotification('回答正确！', 'success');
+                } else {
+                    showNotification('回答错误，正确答案已标出', 'error');
+                }
+
+                // Record answer
+                learningProgress.quizAnswers['q1'] = isCorrect;
+                saveProgress();
+            });
+        }
+
+        // Notes functionality
+        function initializeNotes() {
+            const saveNotesBtn = document.getElementById('save-notes');
+            const notesTextarea = document.getElementById('course-notes');
+            
+            saveNotesBtn.addEventListener('click', function() {
+                const noteContent = notesTextarea.value.trim();
+                if (!noteContent) {
+                    showNotification('请输入笔记内容', 'warning');
+                    return;
+                }
+
+                const note = {
+                    content: noteContent,
+                    timestamp: new Date().toLocaleString('zh-CN'),
+                    videoTime: Math.floor(learningProgress.watchedDuration)
+                };
+
+                learningProgress.notes.push(note);
+                saveProgress();
+                displayNotes();
+                notesTextarea.value = '';
+                showNotification('笔记保存成功！', 'success');
+            });
+
+            displayNotes();
+        }
+
+        // Display saved notes
+        function displayNotes() {
+            const savedNotesDiv = document.getElementById('saved-notes');
+            if (learningProgress.notes.length === 0) return;
+
+            const notesHTML = learningProgress.notes.map((note, index) => `
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-3 rounded">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <p class="text-sm text-yellow-800">${note.content}</p>
+                            <p class="text-xs text-yellow-600 mt-1">${note.timestamp} · 视频 ${note.videoTime}s</p>
+                        </div>
+                        <button class="text-yellow-600 hover:text-yellow-800" onclick="deleteNote(${index})">
+                            <i class="fas fa-trash text-sm"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            savedNotesDiv.innerHTML = `
+                <h4 class="font-semibold text-gray-700 mb-3">历史笔记</h4>
+                ${notesHTML}
+            `;
+        }
+
+        // Delete note
+        function deleteNote(index) {
+            learningProgress.notes.splice(index, 1);
+            saveProgress();
+            displayNotes();
+            showNotification('笔记已删除', 'info');
+        }
+
+        // Update progress display
+        function updateProgress() {
+            const progressPercent = Math.min((learningProgress.watchedDuration / learningProgress.totalDuration) * 100, 100);
+            const progressBar = document.querySelector('.progress-bar');
+            if (progressBar) {
+                progressBar.style.width = progressPercent + '%';
+            }
+        }
+
+        // Save progress to localStorage
+        function saveProgress() {
+            localStorage.setItem('courseProgress_1', JSON.stringify(learningProgress));
+        }
+
+        // Load progress from localStorage
+        function loadProgress() {
+            const saved = localStorage.getItem('courseProgress_1');
+            if (saved) {
+                learningProgress = { ...learningProgress, ...JSON.parse(saved) };
+                updateProgress();
+            }
+        }
+
+        // Resource download functionality
+        function downloadResource(type) {
+            const resourceNames = {
+                'slides': '课程幻灯片.pdf',
+                'guide': '学习指南.docx',
+                'code': '代码示例.zip',
+                'video': '补充视频.mp4'
+            };
+
+            showNotification(`正在下载 ${resourceNames[type]}...`, 'info');
+            
+            // Simulate download
+            setTimeout(() => {
+                showNotification(`${resourceNames[type]} 下载完成！`, 'success');
+            }, 2000);
+        }
+
+        // 收藏功能初始化
+        function initializeFavoriteButton() {
+            if (!window.favoritesManager) return;
+            
+            const favoriteBtn = document.getElementById('course-favorite-btn');
+            if (!favoriteBtn) return;
+            
+            const courseId = favoriteBtn.getAttribute('data-course-id');
+            const isFavorited = window.favoritesManager.isFavorite(courseId);
+            
+            updateDetailFavoriteButton(favoriteBtn, isFavorited);
+            
+            favoriteBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                e.preventDefault();
+                handleDetailFavoriteClick(this);
+            });
+        }
+        
+        function updateDetailFavoriteButton(btn, isFavorited) {
+            const icon = btn.querySelector('i');
+            if (isFavorited) {
+                btn.classList.remove('bg-gray-100', 'hover:bg-gray-200', 'text-gray-700');
+                btn.classList.add('bg-red-100', 'hover:bg-red-200', 'text-red-600');
+                icon.classList.remove('far', 'fas', 'fa-bookmark');
+                icon.classList.add('fas', 'fa-heart');
+                btn.innerHTML = '<i class="fas fa-heart mr-1"></i>已收藏';
+            } else {
+                btn.classList.remove('bg-red-100', 'hover:bg-red-200', 'text-red-600');
+                btn.classList.add('bg-gray-100', 'hover:bg-gray-200', 'text-gray-700');
+                icon.classList.remove('far', 'fas', 'fa-heart');
+                icon.classList.add('fas', 'fa-bookmark');
+                btn.innerHTML = '<i class="fas fa-bookmark mr-1"></i>收藏课程';
+            }
+        }
+        
+        function handleDetailFavoriteClick(btn) {
+            if (!window.favoritesManager) {
+                console.error('收藏管理器未初始化');
+                return;
+            }
+            
+            const courseData = {
+                id: btn.getAttribute('data-course-id'),
+                title: btn.getAttribute('data-course-title'),
+                description: btn.getAttribute('data-course-description'),
+                duration: btn.getAttribute('data-course-duration'),
+                level: btn.getAttribute('data-course-level'),
+                category: btn.getAttribute('data-course-category'),
+                rating: parseFloat(btn.getAttribute('data-course-rating')),
+                students: btn.getAttribute('data-course-students'),
+                image: btn.getAttribute('data-course-image'),
+                url: window.location.href
+            };
+            
+            const isCurrentlyFavorited = window.favoritesManager.isFavorite(courseData.id);
+            
+            if (isCurrentlyFavorited) {
+                window.favoritesManager.removeFavorite(courseData.id);
+                updateDetailFavoriteButton(btn, false);
+                showNotification('已取消收藏 ' + courseData.title, 'success');
+            } else {
+                const success = window.favoritesManager.addFavorite(courseData);
+                if (success) {
+                    updateDetailFavoriteButton(btn, true);
+                    showNotification('已收藏 ' + courseData.title, 'success');
+                } else {
+                    showNotification('课程已在收藏列表中', 'info');
+                }
+            }
+        }
+        
+        // Notification system (using common.js)
+        function showNotification(message, type) {
+            if (typeof PortalUtils !== 'undefined') {
+                PortalUtils.showNotification(message, type);
+            } else {
+                alert(message);
+            }
+        }
+    </script>
+</body>
+</html>

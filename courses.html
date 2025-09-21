@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>系列课程 - 数字教育门户</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Glass morphism effects */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        
+        /* Premium card styles */
+        .premium-card {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            transition: all 0.4s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+        .premium-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 32px 64px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        /* Enhanced course card */
+        .course-card {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            position: relative;
+        }
+        .course-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        /* Gradient backgrounds */
+        .hero-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        /* Text gradients */
+        .text-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Button styles */
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(102, 126, 234, 0.4);
+        }
+        
+        /* Progress bar enhancement */
+        .progress-bar {
+            transition: width 0.5s ease;
+            background: linear-gradient(90deg, #22c55e, #10b981);
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+        }
+        
+        /* Course status with advanced effects */
+        .course-status {
+            position: relative;
+            overflow: hidden;
+        }
+        .course-status::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s;
+        }
+        .course-status:hover::before {
+            left: 100%;
+        }
+        
+        /* Animation keyframes */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 min-h-screen">
+    <!-- Header Navigation -->
+    <header class="bg-white/80 backdrop-blur-md shadow-2xl sticky top-0 z-50 border-b border-white/20">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center">
+                        <i class="fas fa-graduation-cap text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-black text-gradient">数字教育门户</h1>
+                    </div>
+                </div>
+                <nav class="hidden md:flex space-x-10">
+                    <a href="index.html" class="text-gray-700 hover:text-blue-600 font-medium transition-all duration-300 hover:scale-105">首页</a>
+                    <a href="courses.html" class="text-blue-600 font-semibold border-b-2 border-blue-600 pb-2 transition-all duration-300">系列课程</a>
+                    <a href="course-collection.html" class="text-gray-700 hover:text-blue-600 font-medium transition-all duration-300 hover:scale-105">课程合集</a>
+                    <a href="knowledge.html" class="text-gray-700 hover:text-blue-600 font-medium transition-all duration-300 hover:scale-105">知识成果</a>
+                    <a href="notes.html" class="text-gray-700 hover:text-blue-600 font-medium transition-all duration-300 hover:scale-105">学习笔记</a>
+                    <a href="favorites.html" class="text-gray-700 hover:text-blue-600 font-medium transition-all duration-300 hover:scale-105">我的收藏</a>
+                    <a href="dashboard.html" class="text-gray-700 hover:text-blue-600 font-medium transition-all duration-300 hover:scale-105">学习中心</a>
+                </nav>
+                <div class="flex items-center space-x-4">
+                    <!-- 用户信息显示区域 -->
+                    <div id="user-info" class="hidden md:flex items-center space-x-3 bg-gray-100 text-gray-700 px-4 py-3 rounded-full font-semibold" style="display: none;">
+                        <div class="user-display-avatar w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                            U
+                        </div>
+                        <span class="user-display-name">用户</span>
+                    </div>
+                    <!-- 登录/登出按钮区域 -->
+                    <button id="auth-button" class="btn-primary text-white px-6 py-3 rounded-full font-semibold hover:scale-105 transition-all duration-300">
+                        <i class="fas fa-sign-in-alt mr-2"></i>登录
+                    </button>
+                    <!-- 移动端菜单按钮 -->
+                    <button id="mobile-menu-button" class="md:hidden text-2xl text-gray-600 hover:text-blue-600 transition-colors">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="hero-gradient text-white py-24 relative overflow-hidden">
+        <!-- Decorative elements -->
+        <div class="absolute top-10 left-10 w-32 h-32 bg-white/10 rounded-full blur-xl animate-float"></div>
+        <div class="absolute bottom-10 right-10 w-48 h-48 bg-white/10 rounded-full blur-xl animate-float" style="animation-delay: -3s;"></div>
+        
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="text-center fade-in-up">
+                <div class="inline-flex items-center bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-6 py-3 mb-8">
+                    <span class="w-2 h-2 bg-green-400 rounded-full mr-3 animate-pulse"></span>
+                    <span class="text-sm font-bold">正在学习中</span>
+                </div>
+                <h1 class="text-6xl font-black mb-6 leading-tight">
+                    数字资源开发
+                    <span class="block text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-400">
+                        系列课程
+                    </span>
+                </h1>
+                <p class="text-2xl opacity-90 mb-12 max-w-4xl mx-auto leading-relaxed">
+                    六门核心课程，全面掌握数字教育技术，从基础入门到高级应用，
+                    <br class="hidden sm:block">
+                    打造您的数字教育专业技能体系。
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+                    <div class="glass-card p-6 rounded-2xl text-center">
+                        <div class="w-12 h-12 bg-yellow-400/20 rounded-xl flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-clock text-yellow-300 text-xl"></i>
+                        </div>
+                        <div class="text-3xl font-black mb-2">120h</div>
+                        <div class="text-sm opacity-90">总时长</div>
+                    </div>
+                    <div class="glass-card p-6 rounded-2xl text-center">
+                        <div class="w-12 h-12 bg-green-400/20 rounded-xl flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-users text-green-300 text-xl"></i>
+                        </div>
+                        <div class="text-3xl font-black mb-2">1.2K+</div>
+                        <div class="text-sm opacity-90">学员</div>
+                    </div>
+                    <div class="glass-card p-6 rounded-2xl text-center">
+                        <div class="w-12 h-12 bg-purple-400/20 rounded-xl flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-star text-purple-300 text-xl"></i>
+                        </div>
+                        <div class="text-3xl font-black mb-2">4.8</div>
+                        <div class="text-sm opacity-90">平均评分</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Course Progress Overview -->
+    <section class="py-8 bg-white border-b">
+        <div class="container mx-auto px-4">
+            <div class="bg-blue-50 rounded-xl p-6">
+                <div class="flex flex-col md:flex-row items-center justify-between">
+                    <div class="mb-4 md:mb-0">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">学习进度总览</h3>
+                        <p class="text-gray-600">您已完成 2 门课程，正在学习第 3 门课程</p>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-blue-600">33%</div>
+                            <div class="text-sm text-gray-500">总进度</div>
+                        </div>
+                        <div class="w-32 bg-gray-200 rounded-full h-2">
+                            <div class="bg-blue-600 h-2 rounded-full progress-bar" style="width: 33%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Courses Grid -->
+    <section class="py-16">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Course 1 - Completed -->
+                <div class="card-hover bg-white rounded-xl shadow-lg overflow-hidden course-status">
+                    <div class="relative">
+                        <div class="h-48 bg-gradient-to-br from-green-400 to-blue-500"></div>
+                        <div class="absolute top-4 right-4">
+                            <span class="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                                <i class="fas fa-check mr-1"></i>已完成
+                            </span>
+                        </div>
+                        <div class="absolute bottom-4 left-4">
+                            <div class="bg-white/20 backdrop-blur rounded-lg p-2">
+                                <div class="text-white text-sm font-medium">课程一</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Digital Resource Development</h3>
+                        <p class="text-gray-600 mb-4">掌握数字资源开发的核心技能，学习多媒体内容创作与管理。</p>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-clock mr-1"></i>
+                                <span>20小时</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-graduation-cap mr-1"></i>
+                                <span>初级</span>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <div class="flex justify-between text-sm mb-1">
+                                <span>进度</span>
+                                <span class="text-green-600 font-medium">100%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-green-500 h-2 rounded-full" style="width: 100%"></div>
+                            </div>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button class="flex-1 bg-green-100 text-green-700 py-2 px-4 rounded-lg hover:bg-green-200 transition-colors">
+                                <i class="fas fa-eye mr-2"></i>回顾内容
+                            </button>
+                            <button class="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition-colors">
+                                <i class="fas fa-download mr-2"></i>证书
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Course 2 - Completed -->
+                <div class="card-hover bg-white rounded-xl shadow-lg overflow-hidden course-status">
+                    <div class="relative">
+                        <div class="h-48 bg-gradient-to-br from-purple-400 to-pink-500"></div>
+                        <div class="absolute top-4 right-4">
+                            <span class="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                                <i class="fas fa-check mr-1"></i>已完成
+                            </span>
+                        </div>
+                        <div class="absolute bottom-4 left-4">
+                            <div class="bg-white/20 backdrop-blur rounded-lg p-2">
+                                <div class="text-white text-sm font-medium">课程二</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Interactive Learning Design</h3>
+                        <p class="text-gray-600 mb-4">设计引人入胜的交互式学习体验，提升学习者参与度。</p>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-clock mr-1"></i>
+                                <span>18小时</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-graduation-cap mr-1"></i>
+                                <span>中级</span>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <div class="flex justify-between text-sm mb-1">
+                                <span>进度</span>
+                                <span class="text-green-600 font-medium">100%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-green-500 h-2 rounded-full" style="width: 100%"></div>
+                            </div>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button class="flex-1 bg-green-100 text-green-700 py-2 px-4 rounded-lg hover:bg-green-200 transition-colors">
+                                <i class="fas fa-eye mr-2"></i>回顾内容
+                            </button>
+                            <button class="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition-colors">
+                                <i class="fas fa-download mr-2"></i>证书
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Course 3 - In Progress -->
+                <div class="card-hover bg-white rounded-xl shadow-lg overflow-hidden course-status">
+                    <div class="relative">
+                        <div class="h-48 bg-gradient-to-br from-yellow-400 to-orange-500"></div>
+                        <div class="absolute top-4 right-4">
+                            <span class="bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                                <i class="fas fa-play mr-1"></i>学习中
+                            </span>
+                        </div>
+                        <div class="absolute bottom-4 left-4">
+                            <div class="bg-white/20 backdrop-blur rounded-lg p-2">
+                                <div class="text-white text-sm font-medium">课程三</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">AI-Enhanced Education</h3>
+                        <p class="text-gray-600 mb-4">探索人工智能在教育中的应用，打造智能化学习环境。</p>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-clock mr-1"></i>
+                                <span>22小时</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-graduation-cap mr-1"></i>
+                                <span>高级</span>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <div class="flex justify-between text-sm mb-1">
+                                <span>进度</span>
+                                <span class="text-blue-600 font-medium">45%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-blue-500 h-2 rounded-full" style="width: 45%"></div>
+                            </div>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
+                                <i class="fas fa-play mr-2"></i>继续学习
+                            </button>
+                            <button class="favorite-btn bg-gray-200 text-gray-600 py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors" 
+                                    data-course-id="ai-enhanced-education" 
+                                    data-course-title="AI-Enhanced Education" 
+                                    data-course-description="探索人工智能在教育中的应用，打造智能化学习环境。" 
+                                    data-course-duration="22小时" 
+                                    data-course-level="高级" 
+                                    data-course-category="人工智能" 
+                                    data-course-rating="4.5" 
+                                    data-course-students="850" 
+                                    data-course-image="gradient-yellow-orange">
+                                <i class="fas fa-bookmark mr-2"></i>收藏
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Course 4 - Locked -->
+                <div class="card-hover bg-white rounded-xl shadow-lg overflow-hidden course-status opacity-75">
+                    <div class="relative">
+                        <div class="h-48 bg-gradient-to-br from-gray-400 to-gray-500"></div>
+                        <div class="absolute top-4 right-4">
+                            <span class="bg-gray-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                                <i class="fas fa-lock mr-1"></i>待解锁
+                            </span>
+                        </div>
+                        <div class="absolute bottom-4 left-4">
+                            <div class="bg-white/20 backdrop-blur rounded-lg p-2">
+                                <div class="text-white text-sm font-medium">课程四</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">VR/AR Learning Environments</h3>
+                        <p class="text-gray-600 mb-4">构建虚拟现实和增强现实学习环境，创造沉浸式教育体验。</p>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-clock mr-1"></i>
+                                <span>25小时</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-graduation-cap mr-1"></i>
+                                <span>高级</span>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <div class="flex justify-between text-sm mb-1">
+                                <span>进度</span>
+                                <span class="text-gray-500 font-medium">0%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-gray-400 h-2 rounded-full" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <button class="w-full bg-gray-300 text-gray-600 py-2 px-4 rounded-lg cursor-not-allowed">
+                            <i class="fas fa-lock mr-2"></i>完成前序课程后解锁
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Course 5 - Locked -->
+                <div class="card-hover bg-white rounded-xl shadow-lg overflow-hidden course-status opacity-75">
+                    <div class="relative">
+                        <div class="h-48 bg-gradient-to-br from-gray-400 to-gray-500"></div>
+                        <div class="absolute top-4 right-4">
+                            <span class="bg-gray-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                                <i class="fas fa-lock mr-1"></i>待解锁
+                            </span>
+                        </div>
+                        <div class="absolute bottom-4 left-4">
+                            <div class="bg-white/20 backdrop-blur rounded-lg p-2">
+                                <div class="text-white text-sm font-medium">课程五</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Adaptive Learning Systems</h3>
+                        <p class="text-gray-600 mb-4">开发自适应学习系统，实现个性化的智能教育。</p>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-clock mr-1"></i>
+                                <span>20小时</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-graduation-cap mr-1"></i>
+                                <span>专业级</span>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <div class="flex justify-between text-sm mb-1">
+                                <span>进度</span>
+                                <span class="text-gray-500 font-medium">0%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-gray-400 h-2 rounded-full" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <button class="w-full bg-gray-300 text-gray-600 py-2 px-4 rounded-lg cursor-not-allowed">
+                            <i class="fas fa-lock mr-2"></i>完成前序课程后解锁
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Course 6 - Locked -->
+                <div class="card-hover bg-white rounded-xl shadow-lg overflow-hidden course-status opacity-75">
+                    <div class="relative">
+                        <div class="h-48 bg-gradient-to-br from-gray-400 to-gray-500"></div>
+                        <div class="absolute top-4 right-4">
+                            <span class="bg-gray-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                                <i class="fas fa-lock mr-1"></i>待解锁
+                            </span>
+                        </div>
+                        <div class="absolute bottom-4 left-4">
+                            <div class="bg-white/20 backdrop-blur rounded-lg p-2">
+                                <div class="text-white text-sm font-medium">课程六</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Future of Digital Education</h3>
+                        <p class="text-gray-600 mb-4">展望数字教育的未来发展趋势，培养前瞻性思维。</p>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-clock mr-1"></i>
+                                <span>15小时</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-graduation-cap mr-1"></i>
+                                <span>专业级</span>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <div class="flex justify-between text-sm mb-1">
+                                <span>进度</span>
+                                <span class="text-gray-500 font-medium">0%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-gray-400 h-2 rounded-full" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <button class="w-full bg-gray-300 text-gray-600 py-2 px-4 rounded-lg cursor-not-allowed">
+                            <i class="fas fa-lock mr-2"></i>完成前序课程后解锁
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Learning Path -->
+    <section class="py-16 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">学习路径</h2>
+                <p class="text-xl text-gray-600">按照设计的学习路径，循序渐进掌握数字教育技能</p>
+            </div>
+            <div class="bg-white rounded-xl p-8 shadow-lg">
+                <div class="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white font-bold">1</div>
+                        <div>
+                            <div class="font-bold">基础阶段</div>
+                            <div class="text-sm text-gray-600">数字资源开发</div>
+                        </div>
+                    </div>
+                    <div class="hidden md:block text-gray-400">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white font-bold">2</div>
+                        <div>
+                            <div class="font-bold">进阶阶段</div>
+                            <div class="text-sm text-gray-600">交互设计</div>
+                        </div>
+                    </div>
+                    <div class="hidden md:block text-gray-400">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">3</div>
+                        <div>
+                            <div class="font-bold">高级阶段</div>
+                            <div class="text-sm text-gray-600">AI增强教育</div>
+                        </div>
+                    </div>
+                    <div class="hidden md:block text-gray-400">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-gray-400 rounded-full flex items-center justify-center text-white font-bold">4</div>
+                        <div>
+                            <div class="font-bold">专业阶段</div>
+                            <div class="text-sm text-gray-600">VR/AR + 自适应系统</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">数字教育门户</h3>
+                    <p class="text-gray-400 mb-4">致力于打造高质量的数字化教育生态系统</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">快速链接</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white">首页</a></li>
+                        <li><a href="course-collection.html" class="text-gray-400 hover:text-white">课程合集</a></li>
+                        <li><a href="knowledge.html" class="text-gray-400 hover:text-white">知识成果</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">支持</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">帮助中心</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">技术支持</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">用户指南</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">联系信息</h4>
+                    <div class="space-y-2 text-gray-400">
+                        <div><i class="fas fa-envelope mr-2"></i>info@digitaledu.edu</div>
+                        <div><i class="fas fa-phone mr-2"></i>+86-755-1234567</div>
+                        <div><i class="fas fa-map-marker-alt mr-2"></i>深圳市南山区</div>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 数字教育门户. 保留所有权利.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/common.js"></script>
+    <script src="js/mobile-nav.js"></script>
+    <script src="js/global-search.js"></script>
+    <script>
+        // 初始化用户状态管理
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化用户状态管理器
+            if (typeof UserStateManager !== 'undefined') {
+                window.userStateManager = new UserStateManager();
+            }
+            
+            // 初始化收藏管理器
+            if (typeof FavoritesManager !== 'undefined') {
+                window.favoritesManager = new FavoritesManager();
+                // 初始化收藏按钮状态
+                initializeFavoriteButtons();
+            }
+            
+            // 模拟学习进度动画
+            const progressBars = document.querySelectorAll('.progress-bar');
+            progressBars.forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0%';
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, 500);
+            });
+        });
+
+        // 课程卡片点击事件
+        document.querySelectorAll('.course-status').forEach(card => {
+            card.addEventListener('click', function() {
+                const courseTitle = this.querySelector('h3').textContent;
+                const isCompleted = this.querySelector('.bg-green-500');
+                const isInProgress = this.querySelector('.bg-blue-500');
+                
+                if (isCompleted) {
+                    window.location.href = 'course-detail.html?course=' + encodeURIComponent(courseTitle) + '&status=completed';
+                } else if (isInProgress) {
+                    window.location.href = 'course-detail.html?course=' + encodeURIComponent(courseTitle) + '&status=inprogress';
+                }
+            });
+        });
+        
+        // 收藏功能初始化
+        function initializeFavoriteButtons() {
+            if (!window.favoritesManager) return;
+            
+            document.querySelectorAll('.favorite-btn').forEach(btn => {
+                const courseId = btn.getAttribute('data-course-id');
+                const isFavorited = window.favoritesManager.isFavorite(courseId);
+                
+                updateFavoriteButton(btn, isFavorited);
+                
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    handleFavoriteClick(this);
+                });
+            });
+        }
+        
+        function updateFavoriteButton(btn, isFavorited) {
+            const icon = btn.querySelector('i');
+            if (isFavorited) {
+                btn.classList.remove('bg-gray-200', 'text-gray-600', 'hover:bg-gray-300');
+                btn.classList.add('bg-red-100', 'text-red-600', 'hover:bg-red-200');
+                icon.classList.remove('far', 'fas', 'fa-bookmark');
+                icon.classList.add('fas', 'fa-heart');
+                btn.innerHTML = '<i class="fas fa-heart mr-2"></i>已收藏';
+            } else {
+                btn.classList.remove('bg-red-100', 'text-red-600', 'hover:bg-red-200');
+                btn.classList.add('bg-gray-200', 'text-gray-600', 'hover:bg-gray-300');
+                icon.classList.remove('far', 'fas', 'fa-heart');
+                icon.classList.add('fas', 'fa-bookmark');
+                btn.innerHTML = '<i class="fas fa-bookmark mr-2"></i>收藏';
+            }
+        }
+        
+        function handleFavoriteClick(btn) {
+            if (!window.favoritesManager) {
+                console.error('收藏管理器未初始化');
+                return;
+            }
+            
+            const courseData = {
+                id: btn.getAttribute('data-course-id'),
+                title: btn.getAttribute('data-course-title'),
+                description: btn.getAttribute('data-course-description'),
+                duration: btn.getAttribute('data-course-duration'),
+                level: btn.getAttribute('data-course-level'),
+                category: btn.getAttribute('data-course-category'),
+                rating: parseFloat(btn.getAttribute('data-course-rating')),
+                students: btn.getAttribute('data-course-students'),
+                image: btn.getAttribute('data-course-image'),
+                url: 'course-detail.html?course=' + encodeURIComponent(btn.getAttribute('data-course-id'))
+            };
+            
+            const isCurrentlyFavorited = window.favoritesManager.isFavorite(courseData.id);
+            
+            if (isCurrentlyFavorited) {
+                window.favoritesManager.removeFavorite(courseData.id);
+                updateFavoriteButton(btn, false);
+                showToast('已取消收藏 ' + courseData.title, 'success');
+            } else {
+                const success = window.favoritesManager.addFavorite(courseData);
+                if (success) {
+                    updateFavoriteButton(btn, true);
+                    showToast('已收藏 ' + courseData.title, 'success');
+                } else {
+                    showToast('课程已在收藏列表中', 'info');
+                }
+            }
+        }
+        
+        // 显示提示消息
+        function showToast(message, type = 'info') {
+            // 创建 toast 元素
+            const toast = document.createElement('div');
+            toast.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg text-white transform transition-all duration-300 translate-x-full`;
+            
+            // 根据类型设置颜色
+            switch(type) {
+                case 'success':
+                    toast.classList.add('bg-green-500');
+                    break;
+                case 'error':
+                    toast.classList.add('bg-red-500');
+                    break;
+                case 'info':
+                default:
+                    toast.classList.add('bg-blue-500');
+                    break;
+            }
+            
+            toast.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas fa-${type === 'success' ? 'check' : type === 'error' ? 'times' : 'info'} mr-2"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(toast);
+            
+            // 显示动画
+            setTimeout(() => {
+                toast.classList.remove('translate-x-full');
+            }, 100);
+            
+            // 3秒后隐藏
+            setTimeout(() => {
+                toast.classList.add('translate-x-full');
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

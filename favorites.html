@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的收藏 - 数字教育门户</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Glass morphism effects */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        
+        /* Premium card styles */
+        .premium-card {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            transition: all 0.4s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+        .premium-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 32px 64px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        /* Course card styles */
+        .course-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1), 0 5px 10px -3px rgba(0, 0, 0, 0.04);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            position: relative;
+        }
+        .course-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        .course-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        .course-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        /* Gradient backgrounds */
+        .hero-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        /* Text gradients */
+        .text-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Button styles */
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(102, 126, 234, 0.4);
+        }
+        
+        /* Filter tabs */
+        .filter-tab {
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            font-weight: 600;
+            position: relative;
+        }
+        .filter-tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: scale(1.05);
+        }
+        
+        /* Favorite button styles */
+        .favorite-btn {
+            transition: all 0.3s ease;
+        }
+        .favorite-btn.favorited {
+            color: #f59e0b;
+            transform: scale(1.1);
+        }
+        
+        /* Category badges */
+        .category-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-weight: 600;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .badge-ai { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .badge-web { background: linear-gradient(135deg, #06d6a0 0%, #0891b2 100%); color: white; }
+        .badge-design { background: linear-gradient(135deg, #f72585 0%, #b91c8c 100%); color: white; }
+        .badge-data { background: linear-gradient(135deg, #ff8500 0%, #dc2626 100%); color: white; }
+        .badge-mobile { background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); color: white; }
+        
+        /* Animation keyframes */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        /* Empty state styles */
+        .empty-state {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border: 2px dashed #cbd5e1;
+            border-radius: 24px;
+            transition: all 0.3s ease;
+        }
+        .empty-state:hover {
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            border-color: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 min-h-screen">
+    <!-- Header Navigation -->
+    <header class="bg-white/80 backdrop-blur-md shadow-2xl sticky top-0 z-50 border-b border-white/20">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center">
+                        <i class="fas fa-graduation-cap text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-black text-gradient">数字教育门户</h1>
+                    </div>
+                </div>
+                <nav class="hidden md:flex space-x-10">
+                    <a href="index.html" class="text-gray-700 hover:text-blue-600 font-medium transition-all duration-300 hover:scale-105">首页</a>
+                    <a href="courses.html" class="text-gray-700 hover:text-blue-600 font-medium transition-all duration-300 hover:scale-105">系列课程</a>
+                    <a href="course-collection.html" class="text-gray-700 hover:text-blue-600 font-medium transition-all duration-300 hover:scale-105">课程合集</a>
+                    <a href="knowledge.html" class="text-gray-700 hover:text-blue-600 font-medium transition-all duration-300 hover:scale-105">知识成果</a>
+                    <a href="notes.html" class="text-gray-700 hover:text-blue-600 font-medium transition-all duration-300 hover:scale-105">学习笔记</a>
+                    <a href="dashboard.html" class="text-gray-700 hover:text-blue-600 font-medium transition-all duration-300 hover:scale-105">学习中心</a>
+                </nav>
+                <div class="flex items-center space-x-4">
+                    <!-- 用户信息显示区域 -->
+                    <div id="user-info" class="hidden md:flex items-center space-x-3 bg-gray-100 text-gray-700 px-4 py-3 rounded-full font-semibold">
+                        <div class="user-display-avatar w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                            张
+                        </div>
+                        <span class="user-display-name">张同学</span>
+                    </div>
+                    <!-- 登录/登出按钮区域 -->
+                    <button id="auth-button" class="btn-primary text-white px-6 py-3 rounded-full font-semibold hover:scale-105 transition-all duration-300" style="display: none;">
+                        <i class="fas fa-sign-out-alt mr-2"></i>登出
+                    </button>
+                    <!-- 移动端菜单按钮 -->
+                    <button id="mobile-menu-button" class="md:hidden text-2xl text-gray-600 hover:text-blue-600 transition-colors">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="hero-gradient text-white py-16 relative overflow-hidden">
+        <div class="absolute top-6 left-6 w-24 h-24 bg-white/10 rounded-full blur-xl animate-float"></div>
+        <div class="absolute bottom-6 right-6 w-32 h-32 bg-white/10 rounded-full blur-xl animate-float" style="animation-delay: -3s;"></div>
+        
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="text-center fade-in-up">
+                <div class="inline-flex items-center bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-6 py-3 mb-6">
+                    <span class="w-2 h-2 bg-red-400 rounded-full mr-3 animate-pulse"></span>
+                    <span class="text-sm font-bold">个人收藏</span>
+                </div>
+                <h1 class="text-5xl font-black mb-4 leading-tight">
+                    我的
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-red-400">
+                        收藏
+                    </span>
+                </h1>
+                <p class="text-xl opacity-90 mb-8 max-w-3xl mx-auto leading-relaxed">
+                    管理您收藏的课程，随时回顾感兴趣的学习内容。
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
+                    <div class="glass-card p-6 rounded-2xl text-center">
+                        <div class="w-12 h-12 bg-red-400/20 rounded-xl flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-heart text-red-300 text-xl"></i>
+                        </div>
+                        <div class="text-2xl font-black mb-2" id="total-favorites">0</div>
+                        <div class="text-sm opacity-90">收藏课程</div>
+                    </div>
+                    <div class="glass-card p-6 rounded-2xl text-center">
+                        <div class="w-12 h-12 bg-blue-400/20 rounded-xl flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-tags text-blue-300 text-xl"></i>
+                        </div>
+                        <div class="text-2xl font-black mb-2" id="total-categories">0</div>
+                        <div class="text-sm opacity-90">覆盖分类</div>
+                    </div>
+                    <div class="glass-card p-6 rounded-2xl text-center">
+                        <div class="w-12 h-12 bg-green-400/20 rounded-xl flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-clock text-green-300 text-xl"></i>
+                        </div>
+                        <div class="text-2xl font-black mb-2">最新</div>
+                        <div class="text-sm opacity-90">收藏时间</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="py-12">
+        <div class="container mx-auto px-4">
+            <!-- Controls Section -->
+            <div class="premium-card p-8 mb-8">
+                <div class="flex flex-col lg:flex-row gap-6 items-start lg:items-center justify-between">
+                    <!-- Search Bar -->
+                    <div class="flex-1 relative group">
+                        <div class="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl blur opacity-25 group-hover:opacity-75 transition duration-300"></div>
+                        <div class="relative">
+                            <input type="text" id="favorites-search" placeholder="搜索收藏的课程..." 
+                                   class="w-full pl-12 pr-6 py-4 border-2 border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 text-lg bg-white/90 backdrop-blur-sm">
+                            <div class="absolute left-4 top-1/2 transform -translate-y-1/2">
+                                <i class="fas fa-search text-gray-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Filter Tabs -->
+                    <div class="flex gap-3">
+                        <button class="filter-tab px-6 py-3 text-gray-700 active" data-filter="all">
+                            <i class="fas fa-th-large mr-2"></i>全部
+                        </button>
+                        <button class="filter-tab px-6 py-3 text-gray-700" data-filter="recent">
+                            <i class="fas fa-clock mr-2"></i>最近
+                        </button>
+                        <button class="filter-tab px-6 py-3 text-gray-700" data-filter="ai">
+                            <i class="fas fa-robot mr-2"></i>AI
+                        </button>
+                        <button class="filter-tab px-6 py-3 text-gray-700" data-filter="web">
+                            <i class="fas fa-code mr-2"></i>Web
+                        </button>
+                    </div>
+                    
+                    <!-- Clear All Button -->
+                    <button id="clear-favorites" class="px-6 py-3 border border-red-300 text-red-600 rounded-xl font-bold hover:bg-red-50 transition-colors">
+                        <i class="fas fa-trash mr-2"></i>清空收藏
+                    </button>
+                </div>
+            </div>
+
+            <!-- Favorites Grid -->
+            <div id="favorites-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Favorite course cards will be dynamically inserted here -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="empty-state" class="text-center py-16 hidden">
+                <div class="empty-state p-16 mx-auto max-w-2xl">
+                    <div class="w-32 h-32 bg-gradient-to-br from-red-100 to-pink-100 rounded-full flex items-center justify-center mx-auto mb-8">
+                        <i class="fas fa-heart text-red-400 text-5xl"></i>
+                    </div>
+                    <h3 class="text-3xl font-bold text-gray-800 mb-4">还没有收藏任何课程</h3>
+                    <p class="text-gray-600 mb-8 text-lg leading-relaxed">
+                        浏览我们的课程并收藏您感兴趣的内容，<br>
+                        这样您就可以随时回来继续学习。
+                    </p>
+                    <div class="flex gap-4 justify-center">
+                        <a href="course-collection.html" class="btn-primary text-white px-8 py-3 rounded-xl font-bold hover:scale-105 transition-all duration-300">
+                            <i class="fas fa-search mr-2"></i>浏览课程
+                        </a>
+                        <a href="courses.html" class="px-8 py-3 border border-gray-300 text-gray-700 rounded-xl font-bold hover:bg-gray-50 transition-colors">
+                            <i class="fas fa-graduation-cap mr-2"></i>系列课程
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="js/common.js"></script>
+    <script src="js/mobile-nav.js"></script>
+    <script src="js/global-search.js"></script>
+    <script>
+        // 收藏页面管理系统
+        class FavoritesPageManager {
+            constructor() {
+                this.currentFilter = 'all';
+                this.init();
+            }
+
+            init() {
+                this.bindEvents();
+                this.renderFavorites();
+                this.updateStats();
+            }
+
+            // 绑定事件
+            bindEvents() {
+                // 搜索功能
+                document.getElementById('favorites-search').addEventListener('input', (e) => {
+                    this.searchFavorites(e.target.value);
+                });
+
+                // 筛选功能
+                document.querySelectorAll('.filter-tab').forEach(tab => {
+                    tab.addEventListener('click', (e) => {
+                        this.setFilter(e.target.closest('.filter-tab').dataset.filter);
+                    });
+                });
+
+                // 清空收藏
+                document.getElementById('clear-favorites').addEventListener('click', () => {
+                    this.clearAllFavorites();
+                });
+            }
+
+            // 渲染收藏列表
+            renderFavorites() {
+                const container = document.getElementById('favorites-container');
+                const emptyState = document.getElementById('empty-state');
+                
+                let favorites = PortalUtils.getFavorites();
+
+                // 应用筛选
+                if (this.currentFilter === 'recent') {
+                    favorites = favorites.slice().sort((a, b) => new Date(b.favoriteAt) - new Date(a.favoriteAt)).slice(0, 12);
+                } else if (this.currentFilter !== 'all') {
+                    favorites = favorites.filter(fav => fav.category === this.currentFilter);
+                }
+
+                if (favorites.length === 0) {
+                    container.innerHTML = '';
+                    emptyState.classList.remove('hidden');
+                    return;
+                }
+
+                emptyState.classList.add('hidden');
+                container.innerHTML = favorites.map(course => this.createCourseCard(course)).join('');
+
+                // 绑定卡片事件
+                this.bindCardEvents();
+            }
+
+            // 创建课程卡片
+            createCourseCard(course) {
+                const favoriteDate = new Date(course.favoriteAt).toLocaleDateString('zh-CN');
+                const categoryClass = this.getCategoryClass(course.category);
+                
+                return `
+                    <div class="course-card fade-in-up" data-course-id="${course.id}">
+                        <div class="h-48 ${this.getCategoryGradient(course.category)} relative overflow-hidden">
+                            <div class="absolute inset-0">
+                                <div class="absolute top-4 left-4">
+                                    <span class="category-badge ${categoryClass}">
+                                        <i class="${this.getCategoryIcon(course.category)} mr-2"></i>${course.category || '通用'}
+                                    </span>
+                                </div>
+                                <div class="absolute top-4 right-4">
+                                    <button class="favorite-btn favorited w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/30 transition-colors" 
+                                            data-course-id="${course.id}">
+                                        <i class="fas fa-heart text-yellow-400"></i>
+                                    </button>
+                                </div>
+                                <div class="absolute bottom-4 left-4 right-4">
+                                    <div class="glass-card p-4 rounded-xl">
+                                        <h3 class="text-white text-lg font-bold mb-1">${course.title}</h3>
+                                        <div class="flex items-center justify-between text-white/80 text-sm">
+                                            <span><i class="fas fa-clock mr-1"></i>${course.duration || '待定'}</span>
+                                            <span><i class="fas fa-users mr-1"></i>${course.students || '0'}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-3">
+                                <h3 class="font-black text-xl text-gray-900">${course.title}</h3>
+                                <div class="flex items-center text-yellow-500">
+                                    <i class="fas fa-star text-sm"></i>
+                                    <span class="text-sm font-bold ml-1">${course.rating || '4.8'}</span>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-4 leading-relaxed">${course.description || '暂无描述'}</p>
+                            <div class="flex items-center justify-between text-xs text-gray-400 mb-4">
+                                <span>收藏于 ${favoriteDate}</span>
+                                <span>${course.level || '初级'}</span>
+                            </div>
+                            <div class="flex gap-3">
+                                <button class="flex-1 btn-primary text-white py-3 rounded-xl font-bold hover:scale-105 transition-all duration-300"
+                                        onclick="window.location.href='course-detail.html?course=${encodeURIComponent(course.title)}'">
+                                    <i class="fas fa-play mr-2"></i>开始学习
+                                </button>
+                                <button class="remove-favorite-btn px-4 py-3 border border-red-300 text-red-600 rounded-xl hover:bg-red-50 transition-colors"
+                                        data-course-id="${course.id}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // 绑定卡片事件
+            bindCardEvents() {
+                // 收藏按钮
+                document.querySelectorAll('.favorite-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const courseId = btn.dataset.courseId;
+                        this.toggleFavorite(courseId);
+                    });
+                });
+
+                // 移除收藏按钮
+                document.querySelectorAll('.remove-favorite-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const courseId = btn.dataset.courseId;
+                        this.removeFavorite(courseId);
+                    });
+                });
+            }
+
+            // 搜索收藏
+            searchFavorites(query) {
+                const container = document.getElementById('favorites-container');
+                if (!query.trim()) {
+                    this.renderFavorites();
+                    return;
+                }
+
+                const filteredFavorites = PortalUtils.favoritesManager.searchFavorites(query);
+                
+                if (filteredFavorites.length === 0) {
+                    container.innerHTML = '<div class="col-span-full text-center py-16"><div class="text-gray-500">没有找到相关收藏</div></div>';
+                } else {
+                    container.innerHTML = filteredFavorites.map(course => this.createCourseCard(course)).join('');
+                    this.bindCardEvents();
+                }
+            }
+
+            // 设置筛选
+            setFilter(filter) {
+                this.currentFilter = filter;
+                
+                // 更新筛选按钮状态
+                document.querySelectorAll('.filter-tab').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                document.querySelector(`[data-filter="${filter}"]`).classList.add('active');
+                
+                this.renderFavorites();
+            }
+
+            // 切换收藏状态
+            toggleFavorite(courseId) {
+                const result = PortalUtils.removeFromFavorites(courseId);
+                if (result) {
+                    this.showNotification('已取消收藏', 'info');
+                    this.renderFavorites();
+                    this.updateStats();
+                }
+            }
+
+            // 移除收藏
+            removeFavorite(courseId) {
+                if (confirm('确定要取消收藏这门课程吗？')) {
+                    const result = PortalUtils.removeFromFavorites(courseId);
+                    if (result) {
+                        this.showNotification('已取消收藏', 'info');
+                        this.renderFavorites();
+                        this.updateStats();
+                    }
+                }
+            }
+
+            // 清空所有收藏
+            clearAllFavorites() {
+                if (confirm('确定要清空所有收藏吗？此操作无法撤销。')) {
+                    PortalUtils.favoritesManager.clearAll();
+                    this.showNotification('已清空所有收藏', 'info');
+                    this.renderFavorites();
+                    this.updateStats();
+                }
+            }
+
+            // 更新统计信息
+            updateStats() {
+                const favorites = PortalUtils.getFavorites();
+                document.getElementById('total-favorites').textContent = favorites.length;
+                
+                const categories = new Set(favorites.map(fav => fav.category).filter(Boolean));
+                document.getElementById('total-categories').textContent = categories.size;
+            }
+
+            // 获取分类样式
+            getCategoryClass(category) {
+                const categoryMap = {
+                    'ai': 'badge-ai',
+                    'web': 'badge-web',
+                    'design': 'badge-design',
+                    'data': 'badge-data',
+                    'mobile': 'badge-mobile'
+                };
+                return categoryMap[category] || 'badge-ai';
+            }
+
+            // 获取分类渐变
+            getCategoryGradient(category) {
+                const gradientMap = {
+                    'ai': 'bg-gradient-to-br from-blue-500 to-purple-600',
+                    'web': 'bg-gradient-to-br from-green-500 to-teal-600',
+                    'design': 'bg-gradient-to-br from-pink-500 to-red-600',
+                    'data': 'bg-gradient-to-br from-orange-500 to-red-600',
+                    'mobile': 'bg-gradient-to-br from-purple-500 to-indigo-600'
+                };
+                return gradientMap[category] || 'bg-gradient-to-br from-blue-500 to-purple-600';
+            }
+
+            // 获取分类图标
+            getCategoryIcon(category) {
+                const iconMap = {
+                    'ai': 'fas fa-robot',
+                    'web': 'fas fa-code',
+                    'design': 'fas fa-palette',
+                    'data': 'fas fa-chart-bar',
+                    'mobile': 'fas fa-mobile-alt'
+                };
+                return iconMap[category] || 'fas fa-graduation-cap';
+            }
+
+            // 显示通知
+            showNotification(message, type = 'info') {
+                if (typeof PortalUtils !== 'undefined' && PortalUtils.showNotification) {
+                    PortalUtils.showNotification(message, type);
+                } else {
+                    alert(message);
+                }
+            }
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化用户状态管理器
+            if (typeof UserStateManager !== 'undefined') {
+                window.userStateManager = new UserStateManager();
+            }
+            
+            // 初始化收藏页面管理器
+            window.favoritesPageManager = new FavoritesPageManager();
+        });
+    </script>
+</body>
+</html>
